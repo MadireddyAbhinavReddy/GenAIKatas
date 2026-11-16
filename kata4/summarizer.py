@@ -5,7 +5,7 @@ from typing import Dict, List
 import requests
 from bs4 import BeautifulSoup
 from langchain_ollama import OllamaLLM
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 
 class NewsSummarizer:
     def __init__(self, model_name="llama3.2"):
