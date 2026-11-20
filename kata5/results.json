@@ -1,0 +1,51 @@
+[
+  {
+    "generic_question": "Show me the top customers",
+    "stage1_output": {
+      "refined_question": "Show me the top 10 customers by total spending this year",
+      "database": "sales_db",
+      "reasoning": "The person is likely looking for customer spending data, which is stored in the sales database."
+    },
+    "stage2_output": {
+      "sql_query": "SELECT c.name, SUM(o.total_amount) AS total_spending FROM customers c JOIN orders o ON c.customer_id = o.customer_id JOIN order_items oi ON o.order_id = oi.order_id WHERE o.order_date >= NOW() GROUP BY c.customer_id ORDER BY total_spending DESC LIMIT 10",
+      "explanation": "This query joins the customers, orders, and order_items tables to calculate the total spending for each customer this year, then orders the results by total spending in descending order and limits them to the top 10 customers.",
+      "tables_used": [
+        "customers",
+        "orders",
+        "order_items"
+      ]
+    }
+  },
+  {
+    "generic_question": "What's the employee count?",
+    "stage1_output": {
+      "refined_question": "What is the total number of employees in the HR database?",
+      "database": "hr_db",
+      "reasoning": "The question asks for an employee count, which is most relevant to the HR database."
+    },
+    "stage2_output": {
+      "sql_query": "SELECT COUNT(*) FROM employees",
+      "explanation": "This query counts the total number of employees in the HR database",
+      "tables_used": [
+        "employees"
+      ]
+    }
+  },
+  {
+    "generic_question": "How's our inventory looking?",
+    "stage1_output": {
+      "refined_question": "What is the current total value of our inventory?",
+      "database": "inventory_db",
+      "reasoning": "The question about inventory suggests a need for data related to the warehouse and inventory management, which is stored in the inventory_db."
+    },
+    "stage2_output": {
+      "sql_query": "SELECT SUM(i.quantity * p.price) FROM inventory i JOIN warehouses w ON i.warehouse_id = w.warehouse_id JOIN products p ON i.product_id = p.product_id WHERE i.last_updated = (SELECT MAX(last_updated) FROM inventory) AND w.capacity > 0",
+      "explanation": "Calculates the current total value of the inventory by joining the inventory, warehouses, and products tables, filtering for the most recent inventory update and warehouses with available capacity.",
+      "tables_used": [
+        "inventory",
+        "warehouses",
+        "products"
+      ]
+    }
+  }
+]
